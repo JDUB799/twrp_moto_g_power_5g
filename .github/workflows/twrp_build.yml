@@ -1,4 +1,5 @@
 name: Compile TWRP for cancunn
+
 on: [workflow_dispatch]
 
 jobs:
@@ -7,29 +8,27 @@ jobs:
     steps:
       - name: Checkout Device Tree
         uses: actions/checkout@v4
-        
+
       - name: Setup Build Environment
         run: |
           sudo apt update
-          sudo apt install -y bc bison build-essential curl flex g++-multilib gcc-multilib git gnupg gperf lib32ncurses5-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses5 libncurses5-dev libsdl1.2-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev
-        
+          sudo apt install -y bc bison build-essential curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib3ncurses5-dev lib32z1-dev libelf-dev libfontconfig1-dev libgl1-mesa-dev libgusb-dev libpcap-dev libpulse-dev libreadline-dev libsdl1.2-dev libssl-dev libtool libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc yasm zlib1g-dev zip
+
       - name: Sync TWRP Source
+        working-directory: twrp_workspace
         run: |
-          mkdir twrp_workspace && cd twrp_workspace
-          curl https://storage.googleapis.com/git-repo-downloads/repo > repo && chmod a+x repo
-          ./repo init -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
-          ./repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
-          
+          repo init -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.twrp -b twrp-12.1
+          repo sync -j$(nproc) --force-sync
+
       - name: Build Recovery Image
         run: |
           cd twrp_workspace
           source build/envsetup.sh
           lunch twrp_cancunn-eng
           mka recoveryimage
-          
+
       - name: Upload Recovery Image Artifact
         uses: actions/upload-artifact@v4
-        
         with:
           name: TWRP-cancunn-Recovery
           path: twrp_workspace/out/target/product/cancunn/recovery.img
