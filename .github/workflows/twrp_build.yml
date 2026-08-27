@@ -28,7 +28,8 @@ jobs:
           mka recoveryimage
           
       - name: Upload Recovery Image Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
+        
         with:
           name: TWRP-cancunn-Recovery
           path: twrp_workspace/out/target/product/cancunn/recovery.img
