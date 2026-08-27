@@ -13,13 +13,25 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y bc bison build-essential curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick libncurses5-dev lib32z1-dev libelf-dev libfontconfig1-dev libgl1-mesa-dev libgusb-dev libpcap-dev libpulse-dev libreadline-dev libsdl1.2-dev libssl-dev libtool libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc yasm zlib1g-dev zip
+          mkdir -p ~/bin
+          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+          chmod a+x ~/bin/repo
+          echo "$HOME/bin" >> $GITHUB_PATH
+          git config --global user.name "Builder"
+          git config --global user.email "builder@action.com"
 
       - name: Sync TWRP Source
         run: |
           mkdir -p twrp_workspace
           cd twrp_workspace
-          repo init -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.twrp -b twrp-12.1
-          repo sync -j$(nproc) --force-sync
+          repo init -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.twrp -b twrp-12.1 --depth=1
+          repo sync -j$(nproc) --force-sync --no-clone-bundle --no-tags
+
+      - name: Sync Device Tree
+        run: |
+          mkdir -p twrp_workspace/device/motorola/cancunn
+          cp -r * twrp_workspace/device/motorola/cancunn/ 2>/dev/null || true
+          rm -rf twrp_workspace/device/motorola/cancunn/.git twrp_workspace/device/motorola/cancunn/.github
 
       - name: Build Recovery Image
         run: |
