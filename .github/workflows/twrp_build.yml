@@ -12,7 +12,7 @@ jobs:
       - name: Setup Build Environment
         run: |
           sudo apt update
-          sudo apt install -y bc bison build-essential curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib3ncurses5-dev lib32z1-dev libelf-dev libfontconfig1-dev libgl1-mesa-dev libgusb-dev libpcap-dev libpulse-dev libreadline-dev libsdl1.2-dev libssl-dev libtool libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc yasm zlib1g-dev zip
+          sudo apt install -y bc bison build-essential curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick libncurses5-dev lib32z1-dev libelf-dev libfontconfig1-dev libgl1-mesa-dev libgusb-dev libpcap-dev libpulse-dev libreadline-dev libsdl1.2-dev libssl-dev libtool libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc yasm zlib1g-dev zip
 
       - name: Sync TWRP Source
         working-directory: twrp_workspace
