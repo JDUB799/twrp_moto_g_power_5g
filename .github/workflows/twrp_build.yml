@@ -1,6 +1,7 @@
 name: Compile TWRP for cancunn
 
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,9 +22,8 @@ jobs:
           git config --global user.email "builder@action.com"
 
       - name: Sync TWRP Source
+        working-directory: twrp_workspace
         run: |
-          mkdir -p twrp_workspace
-          cd twrp_workspace
           repo init -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.twrp -b twrp-12.1 --depth=1
           repo sync -j$(nproc) --force-sync --no-clone-bundle --no-tags
 
